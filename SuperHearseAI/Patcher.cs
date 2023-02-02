@@ -37,6 +37,15 @@ namespace SuperHearseAI
         }
     }
 
+    [HarmonyPatch(typeof(HearseAI), "LoadDeadCitizens")]
+    public static class HearseAILoadDeadCitizensPatch
+    {
+        static void Prefix(ushort vehicleID, ref Vehicle data, ushort buildingID)
+        {
+            DeathRegistry.RemoveClaimByBuildingID(data.m_targetBuilding);
+        }
+    }
+
     [HarmonyPatch(typeof(HearseAI), "StartTransfer")]
     public static class HearseAIStartTransferPatch
     {
