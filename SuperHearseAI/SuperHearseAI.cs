@@ -8,7 +8,7 @@ namespace SuperHearseAI
     {
         public string Name
         {
-            get { return "Super Hearse AI (2.0)"; }
+            get { return "Super Hearse AI: Redefining DeathCare"; }
         }
 
         public string Description
