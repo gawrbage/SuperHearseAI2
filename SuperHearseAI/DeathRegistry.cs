@@ -8,17 +8,29 @@ namespace SuperHearseAI
     {
         private static List<DeathClaim> claims = new List<DeathClaim>();
 
-        public static void RemoveClaimByBuildingID(ushort buildingID)
+        public static void RemoveClaimByCitizenID(uint citizenID)
         {
-            foreach(DeathClaim claim in claims)
+            foreach (DeathClaim claim in claims)
             {
-                if(claim.buildingID == buildingID)
+                if (claim.citizenID == citizenID)
                 {
                     claims.Remove(claim);
                     return;
                 }
             }
         }
+        public static void RemoveClaimByVehicleID(ushort vehicleID)
+        {
+            foreach (DeathClaim claim in claims)
+            {
+                if(claim.vehicleID == vehicleID)
+                {
+                    claims.Remove(claim);
+                    return;
+                }
+            }
+        }
+
         public static void SubmitClaim(DeathClaim dc)
         {
             claims.Add(dc);

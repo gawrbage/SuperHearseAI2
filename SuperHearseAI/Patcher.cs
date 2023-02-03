@@ -37,12 +37,21 @@ namespace SuperHearseAI
         }
     }
 
+    [HarmonyPatch(typeof(HearseAI), "ReleaseVehicle")]
+    public static class HearseAIReleaseVehiclePatch
+    {
+        static void Prefix(ushort vehicleID, ref Vehicle data)
+        {
+            DeathRegistry.RemoveClaimByVehicleID(vehicleID);
+        }
+    }
+
     [HarmonyPatch(typeof(HearseAI), "LoadDeadCitizens")]
     public static class HearseAILoadDeadCitizensPatch
     {
         static void Prefix(ushort vehicleID, ref Vehicle data, ushort buildingID)
         {
-            DeathRegistry.RemoveClaimByBuildingID(data.m_targetBuilding);
+            //DeathRegistry.RemoveClaimByVehicleID(vehicleID);
         }
     }
 
@@ -67,12 +76,21 @@ namespace SuperHearseAI
                 betterOffer.Active = true;
                 betterOffer.Amount = 0;
                 betterOffer.Building = dc.buildingID;
-
+                
                 offer = betterOffer;
             } catch (System.Exception E)
             {
                 return;
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(CitizenManager), "ReleaseCitizen")]
+    public static class CitizenManagerReleaseCitizenPatch
+    {
+        static void Postfix(uint citizen)
+        {
+            DeathRegistry.RemoveClaimByCitizenID(citizen);
         }
     }
 
