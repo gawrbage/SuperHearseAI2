@@ -69,7 +69,11 @@ namespace SuperHearseAI
             {
                 byte districtID = Singleton<DistrictManager>.instance.GetDistrict(Singleton<BuildingManager>.instance.m_buildings.m_buffer[data.m_sourceBuilding].m_position);
                 DeathClaim dc = DeathRegistry.GetClosestDeathClaim(data.GetLastFramePosition(), vehicleID, districtID);
-                if (dc == null) { return; }
+                if (dc == null) {
+                    dc = DeathRegistry.GetClosestDeathClaimAnyDistrict(data.GetLastFramePosition(), vehicleID); //Get a claim from any district if there isn't any claims in the current district
+                }
+
+                if (dc == null) return; //if the deathclaim is still null, then just return
 
                 TransferManager.TransferOffer betterOffer = new TransferManager.TransferOffer();
 

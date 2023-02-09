@@ -59,6 +59,30 @@ namespace SuperHearseAI
             return closest;
         }
 
+        public static DeathClaim GetClosestDeathClaimAnyDistrict(Vector3 pos, ushort vehicleID)
+        {
+            IEnumerable<DeathClaim> results = from claim in claims
+                                              where claim.vehicleAssigned == false
+                                              select claim;
+
+            if (results.Count() == 0) return null;
+
+            DeathClaim closest = results.First();
+
+            foreach (DeathClaim dc in results)
+            {
+                if (Vector3.Distance(dc.pos, pos) < Vector3.Distance(closest.pos, pos))
+                {
+                    closest = dc;
+                }
+            }
+
+            closest.vehicleAssigned = true;
+            closest.vehicleID = vehicleID;
+
+            return closest;
+        }
+
         public static bool IsBuildingRegistered(ushort buildingID)
         {
             //This way is dumb and inefficient / TODO: probably remove later
