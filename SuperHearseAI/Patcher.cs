@@ -51,7 +51,7 @@ namespace SuperHearseAI
     {
         static void Prefix(ushort vehicleID, ref Vehicle data, ushort buildingID)
         {
-            //DeathRegistry.RemoveClaimByVehicleID(vehicleID);
+            DeathRegistry.RemoveClaimByVehicleID(vehicleID);
         }
     }
 
@@ -69,13 +69,16 @@ namespace SuperHearseAI
             {
                 byte districtID = Singleton<DistrictManager>.instance.GetDistrict(Singleton<BuildingManager>.instance.m_buildings.m_buffer[data.m_sourceBuilding].m_position);
                 DeathClaim dc = DeathRegistry.GetClosestDeathClaim(data.GetLastFramePosition(), vehicleID, districtID);
+                TransferManager.TransferOffer betterOffer = new TransferManager.TransferOffer();
+
                 if (dc == null) {
-                    dc = DeathRegistry.GetClosestDeathClaimAnyDistrict(data.GetLastFramePosition(), vehicleID); //Get a claim from any district if there isn't any claims in the current district
+                    offer = betterOffer;
+                    return;
+                    //dc = DeathRegistry.GetClosestDeathClaimAnyDistrict(data.GetLastFramePosition(), vehicleID); //Get a claim from any district if there isn't any claims in the current district
                 }
 
                 if (dc == null) return; //if the deathclaim is still null, then just return
 
-                TransferManager.TransferOffer betterOffer = new TransferManager.TransferOffer();
 
                 betterOffer.Active = true;
                 betterOffer.Amount = 0;
@@ -105,6 +108,8 @@ namespace SuperHearseAI
         static void Postfix(uint citizenID, ref Citizen data)
         {
             if (!data.Dead) return;
+
+            Debug.Log(citizenID);
 
             ushort citizenBuilding = 0;
             switch (data.CurrentLocation)
